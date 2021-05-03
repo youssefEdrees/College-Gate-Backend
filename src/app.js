@@ -4,7 +4,7 @@ const xss = require('xss-clean');//security
 const mongoSanitize = require('express-mongo-sanitize');//security
 const compression = require('compression');
 const cors = require('cors');
-const config = require('config');
+//const config = require('config');
 
 const routes = require('./api/v1');
 
