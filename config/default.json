@@ -1,0 +1,6 @@
+{
+
+    
+    "db": "mongodb+srv://myUser:psyymani@cluster0.8dmmj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "PORT": "3000"
+}

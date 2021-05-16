@@ -24,7 +24,12 @@ app.use(
     })
   );
 
+
   
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
 // sanitize request data
 app.use(xss());
 app.use(mongoSanitize());
@@ -32,7 +37,7 @@ app.use(mongoSanitize());
 // gzip compression
 app.use(compression());
 
-// enable cors
+// enable cors 
 const corsOptions = {
   exposedHeaders: ['x-auth-token'],
   origin: '*',

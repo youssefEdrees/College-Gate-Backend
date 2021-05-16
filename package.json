@@ -29,6 +29,7 @@
     "http-status": "^1.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.7",
+    "validator": "^13.6.0",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
