@@ -2,5 +2,11 @@
 
     
     "db": "mongodb+srv://myUser:psyymani@cluster0.8dmmj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "PORT": "3000"
+    "PORT": "3000",
+
+    "MASTER_KEY":"123123",
+
+    "ACCESS_TOKEN_SECRET" :"31f1233048feeabe6fa465c67fcc97bd7a518bb93d11e431c459b02369aec7245e5c246996a911333a49a4e4c978fe8aec525e6dd1324b4d1fd7a6e10b0598dd"
+
+    
 }

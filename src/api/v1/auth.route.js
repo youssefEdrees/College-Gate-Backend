@@ -5,8 +5,4 @@ const catchAsync = require("../../utils/catchAsync");
 const router = express.Router();
 
 
-router.route("/student/signup")
-    .post(catchAsync(userConrtoller.createStudent));
-
-
-    module.exports= router;
+module.exports= router;

@@ -16,5 +16,9 @@ router
     .route("/:id")
     .get(catchAsync(quizConrtoller.getQuiz));
     
-
+router.route("/")
+    .get((req,res)=>{
+        res.end("adad");
+    }
+    );
 module.exports= router;

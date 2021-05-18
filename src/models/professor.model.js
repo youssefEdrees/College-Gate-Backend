@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { User } = require('./user.model');
 
-const studentSchema = new mongoose.Schema(
+const professorSchema = new mongoose.Schema(
     {
       courses : [{
-        type : mongoose.Schema.Types.ObjectId ,
-        ref : "Course"
-    }],
-
+          type : mongoose.Schema.Types.ObjectId ,
+          ref : "Course"
+      }],
+        
       department :{
         type : mongoose.Schema.Types.ObjectId ,
         ref : 'Department'
@@ -26,7 +26,7 @@ const studentSchema = new mongoose.Schema(
 );
 
 
-const Student = User.discriminator('Student', studentSchema);
+const Professor = User.discriminator('Professor', professorSchema);
 
 
-module.exports = { Student, studentSchema };
+module.exports = { Professor, professorSchema };

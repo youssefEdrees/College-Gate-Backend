@@ -3,9 +3,17 @@ const { User } = require('./user.model');
 
 const departmentSchema = new mongoose.Schema(
     {
-        DepartmentName :{
+        departmentName :{
             type : String,
-            unique : [true , 'department with that name already exist'],
+            required :true
+        },
+        professorKey :{
+            type:String,
+            required : true
+        },
+        studentKey :{
+            type:String,
+            required : true
         }
     },
     {
@@ -22,5 +30,12 @@ const departmentSchema = new mongoose.Schema(
 
 const Department = User.discriminator('Department', departmentSchema);
 
+departmentSchema.pre('save',function(next){
+    if (this.isNew){
+        this.professorKey = "213123";
+        this.studentKey = "213123";
+    }
+    next();
 
+});
 module.exports = { Department, departmentSchema };

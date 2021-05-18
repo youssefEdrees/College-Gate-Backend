@@ -7,6 +7,8 @@ const cors = require('cors');
 //const config = require('config');
 
 const routes = require('./api/v1');
+const { response } = require('express');
+const statusMessageError = require('./utils/statusMessageError');
 
 
 const app = express();
@@ -26,10 +28,6 @@ app.use(
 
 
   
-app.use(function (err, req, res, next) {
-  console.error(err.stack)
-  res.status(500).send('Something broke!')
-})
 // sanitize request data
 app.use(xss());
 app.use(mongoSanitize());
@@ -48,5 +46,28 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use('/api/v1', routes);
+
+
+// error handler
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  var response = {
+    status : err.status,
+    message : err.message
+  };
+  
+  if (Number(err.code) == Number(11000)){
+    const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+    const field = Object.keys(err.keyValue)[0];
+    response.message = `Duplicate field: ${field} value: ${value}. Please use another value!`;
+    response.status = 400;
+  }
+  
+  console.log(response.status);
+  if (typeof response.status == 'undefined'){
+    response.status = 400
+  }
+  res.status(response.status).json(response);
+});
 
 module.exports = app;
