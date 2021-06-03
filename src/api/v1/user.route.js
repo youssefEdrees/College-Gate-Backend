@@ -16,6 +16,9 @@ router.route("/student/login")
 router.route("/professor/signup")
     .post(catchAsync(userController.createProfessor));
 
+router.route("/professor/login")
+    .post(catchAsync(userController.professorLogin));
+
 
 router.route("/department/signup")
     .post(catchAsync(userController.createDepartment));
