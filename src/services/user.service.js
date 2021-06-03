@@ -88,7 +88,7 @@ exports.getStudentLogin = async (receivedEmail,receivedPassword)=>{
     return user;
 }
 
-exports.getProfessorLogin = async (email,password)=>{
+exports.getProfessorLogin = async (receivedEmail,receivedPassword)=>{
     let info = {
         email:receivedEmail,
         password: receivedPassword
