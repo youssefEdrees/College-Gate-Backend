@@ -2,6 +2,7 @@
 
     
     "db": "mongodb+srv://myUser:psyymani@cluster0.8dmmj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "db_shubra":"mongodb://localhost/collegeGate" ,
     "PORT": "3000",
 
     "MASTER_KEY":"123123",
