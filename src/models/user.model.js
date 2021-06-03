@@ -17,13 +17,13 @@ const userSchema = mongoose.Schema({
     },
     password : {
         type : String ,
-        required  : [true , "password is required"],
-        select : false 
+        select : false ,
+        required  : [true , "password is required"]
     },
     passwordConfirm: {
         type :String ,
-        required: [true, 'Please confirm your password!'],
         select: false,
+        required: [true, 'Please confirm your password!'],
         validate: {
             validator: function(el) {
               return el === this.password;

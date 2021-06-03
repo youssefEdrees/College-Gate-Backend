@@ -3,14 +3,18 @@ const config = require('config');
 const { Department } = require('../models/department.model');
 const { User } = require('../models/user.model');
 const { Professor } = require('../models/professor.model');
+const { Course } = require('../models/course.model');
 
 
 
 exports.createStudent = async (newStudent)=> {
     let student1 = await (await Student.create(newStudent))
     .populate('department','departmentName')
-    .populate('courses')
     .execPopulate();
+    student1 =student1.toJSON();
+    delete student1.password ;
+    delete student1.passwordConfirm ;
+    
     return student1;
 }
 
@@ -18,7 +22,7 @@ exports.createStudent = async (newStudent)=> {
 exports.createProfessor = async (newProfessor)=> {
     let professor1 = await (await Professor.create(newProfessor))
     .populate('department','departmentName')
-    .populate('courses')
+    //.populate('courses')
     .execPopulate();
     return professor1;
 }
