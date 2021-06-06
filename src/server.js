@@ -13,7 +13,7 @@ mongoose.connect(config.get('db_shubra'), {
   }).then(() => {
     console.log('Connected to MongoDB');
     server = app.listen(port, () => {
-      console.log(`Listening to port ${port}`);
+    console.log(`Listening to port ${port}`);
     });
   }).catch(err => {
     console.log('Error: ', err);

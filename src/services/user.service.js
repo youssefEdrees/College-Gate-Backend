@@ -4,6 +4,7 @@ const { Department } = require('../models/department.model');
 const { User } = require('../models/user.model');
 const { Professor } = require('../models/professor.model');
 const { Course } = require('../models/course.model');
+const fs = require('fs').promises;
 
 
 
@@ -119,5 +120,26 @@ exports.checkDepartmentKey= async (departmentId,key,type)=> {
             return false;
         }
         return true;
+    }
+}
+exports.setImage = async (user, imagePath) => {
+
+    imagePath = imagePath.replace(/\\/g, '/');
+    user.imgUrl = imagePath;
+
+    [] = await Promise.all([user.save()]);
+    user = user.toJSON();
+    return user;
+
+}
+exports.deleteImage = async (imagePath) => {
+
+    if(imagePath){
+        try {
+            await fs.unlink(imagePath);
+        } catch (error) {
+
+            if (error.code !== 'ENOENT') throw error;
+        }
     }
 }

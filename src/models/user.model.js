@@ -32,8 +32,8 @@ const userSchema = mongoose.Schema({
           }
     },
     imgUrl : {
-        type : String,
-        default : "tbd" //todo
+      type : String,
+      match: /\.(png|jpg|jpeg|svg)$/
 
     } , 
     verifyToken: {

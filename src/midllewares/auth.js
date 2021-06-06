@@ -23,7 +23,8 @@ exports.authenticate = async (req,res,next)=>{
     
     const user = await (await User.findById(receivedPayload._id))
               .populate("department","departmentName") 
-              .populate("courses") //todo choose user
+              //افرض المستخدم ده موظف دى هتشتغل عادى وهو مش عنده كورسات؟
+              //.populate("courses") //todo choose user 
               .execPopulate();
 
     req.user = user;

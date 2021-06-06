@@ -1,8 +1,8 @@
 {
 
     
-    "db": "mongodb+srv://myUser:psyymani@cluster0.8dmmj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "db_shubra":"mongodb://localhost/collegeGate" ,
+    "db": "mongodb://myUser:psyymani@cluster0-shard-00-00.8dmmj.mongodb.net:27017,cluster0-shard-00-01.8dmmj.mongodb.net:27017,cluster0-shard-00-02.8dmmj.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-14acjm-shard-0&authSource=admin&retryWrites=true&w=majority",
+    "db_shubra":"mongodb://localhost/college",
     "PORT": "3000",
 
     "MASTER_KEY":"123123",

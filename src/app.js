@@ -47,6 +47,9 @@ app.use(cors(corsOptions));
 
 app.use('/api/v1', routes);
 
+// set uploads folder as static
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // error handler
 app.use(function (err, req, res, next) {

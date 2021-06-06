@@ -4,8 +4,9 @@ const { User } = require('./user.model');
 const studentSchema = new mongoose.Schema(
     {
       courses : [{
-        type : mongoose.Schema.Types.ObjectId ,
-        ref : "Student"
+        _id:{type : mongoose.Schema.Types.ObjectId} ,
+        name:String
+        //ref : "Course"
     }],
 
       department :{

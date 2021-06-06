@@ -1,7 +1,35 @@
 const {userService, authService} =  require('./../services');
 const config = require('config');
 const statusMessageError = require("../utils/statusMessageError");
+const multer = require('multer');
+const fs = require('fs').promises;
 
+const multerStorage = multer.diskStorage({
+
+    destination : (req, file, cb) => {
+        cb(null, "uploads/users");
+    },
+    filename: (req, file, cb) => {
+        const ext = file.mimetype.split('/')[1];
+        cb(null,`${new Date().toISOString()}-${file.originalname}`);
+    }
+
+});
+
+const multerFilter = (req, file, cb) => {
+    if (file.mimetype.split('/')[1].match(/(png|jpg|jpeg)/)) {
+        cb(null, true);
+    } else {
+        cb(new statusMessageError('Not an image! Please upload only images.', 400), false);
+    }
+}
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
+});
+
+exports.uploadImage = upload.single('image');
 
 exports.createStudent = async (req,res,next)=> {
     const student = await userService.createStudent(req.body);
@@ -57,11 +85,6 @@ exports.createProfessor = async (req,res,next)=> {
 
 };
 
-
-
-
-
-
 exports.getDepartmentNames = async(req,res,next)=>{
     const departmentNames = await userService.getDepartmentList();
     res.status(200).json(departmentNames);
@@ -106,3 +129,22 @@ exports.professorLogin = async (req,res,next)=>{
         token : myToken,
         user : loggedUser });
 };
+
+exports.setImage = async (req, res, next) =>{
+    
+    if(!req.file){ next (new statusMessageError("No files were uploaded", 400))}
+    //if(he doesn't put token)
+    let user = req.user;
+
+    await userService.deleteImage(user.imgUrl);
+    user = await userService.setImage(user, req.file.path);
+    res.status(200).json(
+        {
+          id : user._id,
+          type: user.type,
+          name: user.name,
+          imgUrl: user.imgUrl
+
+        }
+    )
+}

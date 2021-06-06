@@ -33,7 +33,11 @@ router.route("/department/list")
 router.route("/me")
     .get(catchAsync(authenticate),catchAsync(userController.getUser));
 
+router.route("/me/image")
+    .post(
+        catchAsync(authenticate),
+        userController.uploadImage,
+        catchAsync(userController.setImage)
+        );    
 
-
-
-    module.exports= router;
+module.exports= router;
