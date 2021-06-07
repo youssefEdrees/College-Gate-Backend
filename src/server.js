@@ -4,7 +4,7 @@ const config = require('config');
 
 let server;
 const port = config.get('PORT') || 3000;
-
+const ip = config.get('IP');
 mongoose.connect(config.get('db_shubra'), {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -12,7 +12,7 @@ mongoose.connect(config.get('db_shubra'), {
     useUnifiedTopology: true
   }).then(() => {
     console.log('Connected to MongoDB');
-    server = app.listen(port, () => {
+    server = app.listen(port,() => {
     console.log(`Listening to port ${port}`);
     });
   }).catch(err => {

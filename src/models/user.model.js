@@ -5,6 +5,9 @@ const validator = require('validator');
 const userSchema = mongoose.Schema({
     name :{
         type : String ,
+        minlength: 1,
+        maxlength: 30,
+        trim:true,
         required :[ true , 'please enter your name']
     },
     email : {
@@ -33,7 +36,8 @@ const userSchema = mongoose.Schema({
     },
     imgUrl : {
       type : String,
-      match: /\.(png|jpg|jpeg|svg)$/
+      match: /\.(png|jpg|jpeg|svg)$/,
+      default: "uploads/users/default.jpg"
 
     } , 
     verifyToken: {

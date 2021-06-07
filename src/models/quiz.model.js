@@ -5,8 +5,9 @@ const quizSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-        course_id :{
-        type : String,
+    course :{
+        type : mongoose.Schema.Types.ObjectId,
+        ref: "Course",
         required: true
     },
     full_mark : {
@@ -15,7 +16,8 @@ const quizSchema = new mongoose.Schema({
     },
     students : [{
         type : mongoose.Schema.Types.ObjectId ,
-        ref : 'Student'
+        ref : 'Student',
+        //grade: String
     }
     ],
     grades :[{

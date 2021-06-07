@@ -3,26 +3,20 @@ const mongoose = require("mongoose");
 const messageSchema = new mongoose.Schema(
     {
     
-        /*course: {
-            type: mongoose.Schema.Types.ObjectId,
-            //ref: "Course",
-            required: true
-        },*/
         course: {
-            _id:{ type: mongoose.Schema.Types.ObjectId, required: true},
-            name:{type: String},
-            //type: mongoose.Schema.Types.ObjectId,
-            //ref: "Course",
-            //required: true
+            
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Course",
+            required: true
         },
         sender: {
-            //type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Professor',required: true }]
+           
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true
         },
         receiver: {
-            //type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Professor',required: true }]
+            
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true
@@ -43,7 +37,6 @@ const messageSchema = new mongoose.Schema(
             type: String,
             required: true
         }
-        
         
     },
     {

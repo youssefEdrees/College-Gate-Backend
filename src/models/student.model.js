@@ -4,10 +4,10 @@ const { User } = require('./user.model');
 const studentSchema = new mongoose.Schema(
     {
       courses : [{
-        _id:{type : mongoose.Schema.Types.ObjectId} ,
-        name:String
-        //ref : "Course"
-    }],
+        type : mongoose.Schema.Types.ObjectId ,
+        ref : "Course",
+        unique: false
+      }],
 
       department :{
         type : mongoose.Schema.Types.ObjectId ,
@@ -29,5 +29,6 @@ const studentSchema = new mongoose.Schema(
 
 const Student = User.discriminator('Student', studentSchema);
 
+//Student.createIndex()
 
 module.exports = { Student, studentSchema };

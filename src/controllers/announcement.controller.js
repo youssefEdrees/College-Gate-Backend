@@ -11,33 +11,30 @@ const mongoose = require('mongoose');
 
 exports.createAnnouncement = async(req, res, next) => {
 
-    //check course is exist
-    /*const course = await announcementService.checkCourseExist(req.params.id);
-    if(!course){
-        next (new statusMessageError(400,"Invalid course ID"));
-    }*/
-    //check if professor create this course
-    /*
-    if(course.professor._id !== req.user._id){
-        next (new statusMessageError(400,"this course is not created by the user"));
-    }*/
-    /*const course = {
-        "_id":req.params.id,
-        "name":"math",
-        "professor":"60b97c0b12d1ee66eb581d4w"
-    }*/
     if(req.user.type !== "Professor"){
-        next (new statusMessageError(400,"this user is not professor so it can't create post"));
+        return next (new statusMessageError(403,
+            "this user is not professor so it can't create post"));
     }
-    //validationOnCourse(req.user, course, next);
+
+    //check course is exist
+    const course = await announcementService.checkCourseExist(req.params.id);
+    if(!course){
+        return next (new statusMessageError(404,"Invalid course ID"));
+    }
+    //check if professor create this course
+    
+    if(course.professor._id !== req.user._id){
+        return next (new statusMessageError(403,
+            "this course is not created by the user"));
+    }
+  
+    
+    const check = validationOnCourse(req.user, course);
+    if(check instanceof statusMessageError) return next(check);
+
     let newAnnouncement = {
         
-        //"course": req.params.id
-         
-        "course": {
-            "_id":req.params.id,
-            "name":"math"
-        },
+        "course": req.params.id,
         "professor": req.user._id,
         "content" : req.body.content,
         "date" : getDate(new Date())
@@ -50,29 +47,19 @@ exports.createAnnouncement = async(req, res, next) => {
 exports.getListOfAnnouncements = async(req, res, next) => {
 
     //check course is exist
-    /*const course = await announcementService.checkCourseExist(req.params.id);
+    const course = await announcementService.checkCourseExist(req.params.id);
     if(!course){
-        next (new statusMessageError(400,"Invalid course ID"));
-    }*/
-    /*const course = {
-        "_id":req.params.id,
-        "name":"math",
-        "professor":"60b97c0b12d1ee66eb581d4w",
-        "students":[
-            {
-                _id: "60b97c0b12d1ee66eb581d4z"
-            },
-            {
-                _id: "60b9eee012d1ee66eb58511c"
-            }
-
-        ]
-    }*/
+        return next (new statusMessageError(404,"Invalid course ID"));
+    }
     
-    //validationOnCourse(req.user, course, next);
+    //check user is enrolled or create course
+    const check = validationOnCourse(req.user, course);
+    if(check instanceof statusMessageError ) return next(check);
+
     const announcements= await announcementService.getListOfAnnouncements(req.params.id, req.query);
     if(announcements.length === 0){
-        next (new statusMessageError(400,"there are no announcements for this course or offset out of range"));
+        return next (new statusMessageError(404,
+            "there are no announcements for this course or offset out of range"));
     }
     res.status(200).json(
     {
@@ -84,27 +71,20 @@ exports.getListOfAnnouncements = async(req, res, next) => {
 };
 exports.getAllAnnouncements = async(req, res, next) => {
 
-   
-    //let courses_ids = [];
-    
-    /*for(let i = 0; i < req.user.courses.length ; i++){
-
-        courses_ids[i] = req.user.courses[i]._id;
-    }
-    res.status(200).json( courses_ids );*/
-
-    //check if there are no courses for this user
-    if(!req.user.courses){
-        next (new statusMessageError(400,"there are no courses for this user"));
-    }
+  
     if(req.user.type !== "Student"){
-        next (new statusMessageError(400,"this user is not student"));
+        return next (new statusMessageError(403,"this user is not student"));
     }
-
+    //check if there are no courses for this user
+    if(req.user.courses.length === 0){
+        return next (new statusMessageError(404,"there are no courses for this user"));
+    }
+   
     const announcements= await announcementService.getAllAnnouncements(req.query,
          req.user.courses);
     if(announcements.length === 0){
-        next (new statusMessageError(400,"there are no announcements yet oroffset out of range"));
+        return next (new statusMessageError(404,
+            "there are no announcements yet oroffset out of range"));
     }     
     
     res.status(200).json(
@@ -133,13 +113,14 @@ function getDate(d){
     return day+"-" + monthNames[m] + "-" + year +" " + strTime;
 
 }
-function validationOnCourse(user, course, next){
-    //if prof is sender
+function validationOnCourse(user, course){
+    
    
     if(user.type === "Professor"){
         //check if prof is created this course
-        if(course.professor._id !== user._id){
-            next (new statusMessageError(400,"this course is not created by professor so check course ID"));
+        if(String(course.professor._id )!== String(user._id)){
+            return new statusMessageError(403,
+                "this course is not created by this professor so check course ID");
         }
     }
     else if(user.type === "Student"){
@@ -152,7 +133,8 @@ function validationOnCourse(user, course, next){
             }      
         });
         if(student === -1){
-            next (new statusMessageError(400,"student didn't enroll in this course so check course ID"));
+            return new statusMessageError(403,
+                "student didn't enroll in this course so check course ID");
         }
     }
 }

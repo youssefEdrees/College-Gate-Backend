@@ -109,6 +109,7 @@ exports.checkDepartmentKey= async (departmentId,key,type)=> {
         console.log('Student');
         console.log('Student',key);
         dep = await Department.findOne({_id:departmentId,studentKey:key});
+        console.log(dep);
         if(!dep){
             return false;
         }

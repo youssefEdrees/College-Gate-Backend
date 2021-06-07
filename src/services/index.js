@@ -5,3 +5,4 @@ exports.announcementService = require("./announcement.service");
 exports.messageService = require("./message.service");
 exports.complaintService = require("./complaint.service");
 exports.warningService = require("./warning.service");
+exports.courseService = require("./course.service");

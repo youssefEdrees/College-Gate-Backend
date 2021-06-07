@@ -2,20 +2,27 @@ const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true
+      type: String,
+      minlength: 1,
+      maxlength: 50,
+      required :[ true , 'please enter course name'],
+      trim:true
     },
-    /*imageUrl: {type: String, default : "tbd"},
+    imgUrl: {
+      type: String, 
+      match: /\.(png|jpg|jpeg|svg)$/, 
+      default : "uploads/courses/default.jpg"
+    },
     professor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Professor",
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Professor",
+      required: true
     },
     students: {
-        type: [{type: mongoose.Schema.Types.ObjectId,ref:"Student"}]
-    }*/
+      type: [{type: mongoose.Schema.Types.ObjectId, ref:"Student"}]
+    }
         
-}/*,
+},
 {
     toJSON: {
       virtuals: true
@@ -23,9 +30,9 @@ const courseSchema = new mongoose.Schema({
     toObject: {
       virtuals: true
     }
-  }*/);
+  });
 
-
+//Schema.unique([professor, name]);
 const Course = mongoose.model('Course', courseSchema);
 
 module.exports = { Course, courseSchema };

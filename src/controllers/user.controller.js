@@ -20,7 +20,7 @@ const multerFilter = (req, file, cb) => {
     if (file.mimetype.split('/')[1].match(/(png|jpg|jpeg)/)) {
         cb(null, true);
     } else {
-        cb(new statusMessageError('Not an image! Please upload only images.', 400), false);
+        cb(new statusMessageError(400, 'Not an image! Please upload only images.'), false);
     }
 }
 
@@ -41,10 +41,10 @@ exports.createDepartment = async (req,res,next)=> {
     var receivedKey = req.body.key;
     var data = req.body.department;
     if (Number(key)!= Number(receivedKey)){
-        next(new statusMessageError(401," Wrong key "));
+        return next(new statusMessageError(401," Wrong key "));
     }
     if (data.password != data.passwordConfirm){
-        next(new statusMessageError(400," Password and password confirm don't match "));
+        return next(new statusMessageError(400," Password and password confirm don't match "));
     }
     const newDepartment = await userService.createDepartment(data);
     
@@ -59,10 +59,10 @@ exports.createStudent = async (req,res,next)=> {
     var data = req.body.user;
     data.department = data.departmentId;
     if (await userService.checkDepartmentKey(data.departmentId,receivedKey,"Student")){
-        next(new statusMessageError(401," Wrong key "));
+        return next(new statusMessageError(401," Wrong key "));
     }
     if (data.password != data.passwordConfirm){
-        next(new statusMessageError(400," Password and password confirm don't match "));
+        return next(new statusMessageError(400," Password and password confirm don't match "));
     }
     const newStudent = await userService.createStudent(data);
     
@@ -74,10 +74,10 @@ exports.createProfessor = async (req,res,next)=> {
     var data = req.body.user;
     data.department = data.departmentId;
     if (await userService.checkDepartmentKey(data.departmentId,receivedKey,"Professor")){
-        next(new statusMessageError(401," Wrong key "));
+        return next(new statusMessageError(401," Wrong key "));
     }
     if (data.password != data.passwordConfirm){
-        next(new statusMessageError(400," Password and password confirm don't match "));
+        return next(new statusMessageError(400," Password and password confirm don't match "));
     }
     const newProfessor = await userService.createProfessor(data);
     
@@ -98,7 +98,7 @@ exports.getUser = async (req,res,next)=>{
 exports.departmentLogin = async (req,res,next)=>{
     requestedUser = await userService.getDepartmentLogin(req.body.email,req.body.password);
     if(requestedUser == null){
-        next (new statusMessageError(401,"incorrect username or password"));
+        return next (new statusMessageError(401,"incorrect username or password"));
     }
     const token = authService.createToken(requestedUser._id);
     res.status(200).json({
@@ -110,7 +110,7 @@ exports.departmentLogin = async (req,res,next)=>{
 exports.StudentLogin = async (req,res,next)=>{
     loggedUser = await userService.getStudentLogin(req.body.email,req.body.password);
     if(loggedUser == null){
-        next (new statusMessageError(401,"incorrect username or password"));
+        return next (new statusMessageError(401,"incorrect username or password"));
     }
     const myToken = authService.createToken(loggedUser._id);
     res.status(200).json({
@@ -122,7 +122,7 @@ exports.StudentLogin = async (req,res,next)=>{
 exports.professorLogin = async (req,res,next)=>{
     loggedUser = await userService.getProfessorLogin(req.body.email,req.body.password);
     if(loggedUser == null){
-        next (new statusMessageError(401,"incorrect username or password"));
+        return next (new statusMessageError(401,"incorrect username or password"));
     }
     const myToken = authService.createToken(loggedUser._id);
     res.status(200).json({
@@ -132,7 +132,7 @@ exports.professorLogin = async (req,res,next)=>{
 
 exports.setImage = async (req, res, next) =>{
     
-    if(!req.file){ next (new statusMessageError("No files were uploaded", 400))}
+    if(!req.file){ return next (new statusMessageError(400, "No files were uploaded"))}
     //if(he doesn't put token)
     let user = req.user;
 
