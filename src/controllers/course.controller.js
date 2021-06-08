@@ -88,7 +88,7 @@ exports.getCourse = async (req, res, next) => {
         return  next(new statusMessageError(403,
              "You do not have the permission to perform this action"));
     }
-    const course = await courseService.getCourse(req.params.id);
+    const course = await courseService.getCourse(req.params.id, 'notEnroll');
 
     if(!course) return next(new statusMessageError(400, "Invalid course id"));
 
@@ -101,7 +101,7 @@ exports.enrollOnCourse = async (req, res, next) => {
     if(req.user.type !== "Student") 
         return next(new statusMessageError(403,
              "You do not have the permission to perform this action"));
-    const course = await courseService.getCourse(req.params.id);
+    const course = await courseService.getCourse(req.params.id, 'enroll');
 
     if(!course) return next(new statusMessageError(400,"Invalid course id"));
 
@@ -129,7 +129,7 @@ exports.getCourseStudents = async (req,res, next) => {
     if(req.user.type !== "Professor"){
         return next(new statusMessageError(403, "You do not have the permission to perform this action"));
     }
-    const course = await courseService.getCourse(req.params.id);
+    const course = await courseService.getCourse(req.params.id, 'notEnroll');
 
     if(!course) return next(new statusMessageError(400, "Invalid course id"));
 

@@ -12,7 +12,7 @@ mongoose.connect(config.get('db'), {
     useUnifiedTopology: true
   }).then(() => {
     console.log('Connected to MongoDB');
-    server = app.listen(port,() => {
+    server = app.listen(port, () => {
     console.log(`Listening to port ${port}`);
     });
   }).catch(err => {

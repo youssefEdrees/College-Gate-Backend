@@ -24,11 +24,20 @@ exports.enrollOnCourse = async (user, course) => {
 
    
 };
-exports.getCourse = async (id) => {
+exports.getCourse = async (id, enroll) => {
+    let course;
+    if(String(enroll) === 'enroll'){
+        course =  Course.findOne({key: id})
+        .populate("professor", "name imgUrl")
+        .populate("students", "name imgUrl");
+     
+    }
+    else{
+        course =  Course.findById(id)
+        .populate("professor", "name imgUrl")
+        .populate("students", "name imgUrl");
+    }
     
-    let course =  Course.findById(id)
-    .populate("professor", "name imgUrl")
-    .populate("students", "name imgUrl");
      
     [course] = await Promise.all([course]);
 
