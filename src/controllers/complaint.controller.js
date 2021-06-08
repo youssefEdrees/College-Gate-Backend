@@ -17,9 +17,9 @@ exports.createComplaint = async(req, res, next) => {
     //let url = req.url;
     let newComplaint;
     
-    if(req.user.type === "Professor"){
-        return next (new statusMessageError(403," You don't have the permission to do this action"));
-    }
+    //if(req.user.type === "Professor"){
+        //return next (new statusMessageError(403," You don't have the permission to do this action"));
+    //}
     if((req.url).search("response") !== -1 ){ // emplyee response to stud
 
        
@@ -77,9 +77,9 @@ exports.getListOfComplaints = async(req, res, next) => {
    
     let user_id = req.user._id;
 
-    if(req.user.type === "Professor"){
-        return next (new statusMessageError(403," You don't have the permission to do this action"));
-    }
+    //if(req.user.type === "Professor"){
+        //return next (new statusMessageError(403," You don't have the permission to do this action"));
+    //}
 
     const complaints= await complaintService.getListOfComplaints(req.query,
         type, user_id);

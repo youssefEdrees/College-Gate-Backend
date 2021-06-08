@@ -30,7 +30,10 @@ const complaintSchema = new mongoose.Schema(
         date: {
             type: String,
             required: true
-        }
+        },
+        /*response: {
+            type: bool,
+        }*/
         
         
     },

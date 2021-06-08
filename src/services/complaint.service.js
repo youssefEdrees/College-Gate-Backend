@@ -6,7 +6,7 @@ exports.createComplaint = async(newComplaint) => {
 
     
     let complaint =  await (await Complaint.create(newComplaint))
-    .select("  sender receiver subject content date")
+    //.select("  sender receiver subject content date")
     .populate("sender", "name imgUrl")
     .populate("receiver", "name imgUrl")
     .execPopulate();
