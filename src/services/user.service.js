@@ -109,18 +109,18 @@ exports.checkDepartmentKey= async (departmentId,key,type)=> {
         console.log('Student');
         console.log('Student',key);
         dep = await Department.findOne({_id:departmentId,studentKey:key});
-        console.log(dep);
+        console.log(dep, typeof(dep));
         if(!dep){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }else {
         console.log('prof');
         dep = await Department.findOne({_id:departmentId,professorKey:key});
         if(!dep){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }
 exports.setImage = async (user, imagePath) => {

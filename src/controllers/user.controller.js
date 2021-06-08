@@ -59,7 +59,7 @@ exports.createStudent = async (req,res,next)=> {
     var data = req.body.user;
     data.department = data.departmentId;
     if (await userService.checkDepartmentKey(data.departmentId,receivedKey,"Student")){
-        return next(new statusMessageError(401," Wrong key "));
+        return next(new statusMessageError(401," Wrong key or department id"));
     }
     if (data.password != data.passwordConfirm){
         return next(new statusMessageError(400," Password and password confirm don't match "));
@@ -74,7 +74,7 @@ exports.createProfessor = async (req,res,next)=> {
     var data = req.body.user;
     data.department = data.departmentId;
     if (await userService.checkDepartmentKey(data.departmentId,receivedKey,"Professor")){
-        return next(new statusMessageError(401," Wrong key "));
+        return next(new statusMessageError(401," Wrong key  or department id"));
     }
     if (data.password != data.passwordConfirm){
         return next(new statusMessageError(400," Password and password confirm don't match "));

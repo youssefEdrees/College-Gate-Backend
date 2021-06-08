@@ -2,16 +2,14 @@ const {messageService} = require("../services/");
 
 const statusMessageError = require("../utils/statusMessageError");
 
-const monthNames = ["January", "February", "March", "April", "May", "June",
-"July", "August", "September", "October", "November", "December"
-];
+const {getDate, validationOnCourse} = require("../utils/helperFunctions");
 
 exports.createMessage = async(req, res, next) => {
 
     // Todo check that course is exist
    const course = await messageService.checkCourseExist(req.params.id);
     if(!course){
-        return next (new statusMessageError(404,"Invalid course ID"));
+        return next (new statusMessageError(400,"Invalid course ID"));
     }
     
     const check = validationOnCourse(req.user, course);
@@ -48,7 +46,7 @@ exports.getListOfMessages = async(req, res, next) => {
     // Todo check that course is exist
    const course = await messageService.checkCourseExist(req.params.id);
     if(!course){
-        return next (new statusMessageError(404,"Invalid course ID"));
+        return next (new statusMessageError(400,"Invalid course ID"));
     }
 
     const check = validationOnCourse(req.user, course);
@@ -59,7 +57,7 @@ exports.getListOfMessages = async(req, res, next) => {
     const messages= await messageService.getListOfMessages(req.params.id, req.query,
          type, user_id);
     if(messages.length === 0){
-        return next (new statusMessageError(404,
+        return next (new statusMessageError(400,
             "there are no messages for this course or offset out of range"));
     }     
     res.status(200).json(
@@ -83,7 +81,7 @@ exports.getMessage = async (req, res, next) => {
 
     const message = await messageService.getMessage(req.params.id);
     if(message === null){
-        return next (new statusMessageError(404,"Invalid message id"));
+        return next (new statusMessageError(400,"Invalid message id"));
     }
     res.status(200).json({
         id : message._id,
@@ -95,47 +93,3 @@ exports.getMessage = async (req, res, next) => {
     });
 
 }; 
-function getDate(d){
-
-   
-    let year = d.getFullYear();
-    let m = d.getMonth();
-    let day = d.getDay();
-    
-    let hours = d.getHours();
-    let minutes = d.getMinutes();
-    let ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    let strTime = hours + ':' + minutes + ' ' + ampm;
-
-    return day+"-" + monthNames[m] + "-" + year +" " + strTime;
-
-}
-function validationOnCourse(user, course){
-    //if prof is sender
-    if(user.type === "Professor"){
-        //check if prof is created this course
-       
-        if(String(course.professor._id) !== String(user._id)){
-            return new statusMessageError(403,"this course is not created by professor");
-        }
-    }
-    
-    else if(user.type === "Student"){
-
-        let student = course.students.findIndex(function (stud, index){
-           
-            
-            if(stud._id.toString() === user._id.toString()){
-                
-                return true;
-            }      
-        });
-        //check if stud enrolled in this course
-        if(student === -1){
-            return new statusMessageError(400,"student didn't enroll in this course");
-        }
-    }
-}

@@ -4,7 +4,7 @@
     "db": "mongodb://myUser:psyymani@cluster0-shard-00-00.8dmmj.mongodb.net:27017,cluster0-shard-00-01.8dmmj.mongodb.net:27017,cluster0-shard-00-02.8dmmj.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-14acjm-shard-0&authSource=admin&retryWrites=true&w=majority",
     "db_shubra":"mongodb://localhost/college",
     "PORT": "3000",
-    "IP": "http://45.106.221.46",
+    "IP": "192.168.1.102",
     "MASTER_KEY":"123123",
 
     "ACCESS_TOKEN_SECRET" :"31f1233048feeabe6fa465c67fcc97bd7a518bb93d11e431c459b02369aec7245e5c246996a911333a49a4e4c978fe8aec525e6dd1324b4d1fd7a6e10b0598dd"

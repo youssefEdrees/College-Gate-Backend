@@ -18,7 +18,7 @@ exports.createComplaint = async(req, res, next) => {
     let newComplaint;
     
     if(req.user.type === "Professor"){
-        return next (new statusMessageError(403," this user is professor can't create complaint"));
+        return next (new statusMessageError(403," You don't have the permission to do this action"));
     }
     if((req.url).search("response") !== -1 ){ // emplyee response to stud
 
@@ -29,7 +29,7 @@ exports.createComplaint = async(req, res, next) => {
         const complaintResponse = await complaintService.getComplaint(complaintId);
         // check if complaint not valid
         if(complaintResponse === null){
-            return next (new statusMessageError(404,"can't get complaint check id "));
+            return next (new statusMessageError(400,"Invalid Id"));
         }
         newComplaint = {
         
@@ -78,14 +78,14 @@ exports.getListOfComplaints = async(req, res, next) => {
     let user_id = req.user._id;
 
     if(req.user.type === "Professor"){
-        return next (new statusMessageError(403," this user is professor can't get complaints"));
+        return next (new statusMessageError(403," You don't have the permission to do this action"));
     }
 
     const complaints= await complaintService.getListOfComplaints(req.query,
         type, user_id);
 
     if(complaints.length === 0){
-        return next (new statusMessageError(404,"user doesn't have complaint messages or offset out of range"));
+        return next (new statusMessageError(400,"user doesn't have complaint messages or offset out of range"));
     }
 
     res.status(200).json(
@@ -109,7 +109,7 @@ exports.getComplaint = async (req, res, next) => {
 
     const complaint = await complaintService.getComplaint(req.params.id);
     if(complaint === null){
-        return next (new statusMessageError(404,"can't get complaint check id"));
+        return next (new statusMessageError(400,"Invalid Id"));
     }
     res.status(200).json({
         id : complaint._id,

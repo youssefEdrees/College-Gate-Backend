@@ -10,7 +10,7 @@ exports.createWarning = async(req, res, next) => {
     let newWarning;
   
     if(req.user.type !== "Department"){
-        return next (new statusMessageError(403," user should be employee"));
+        return next (new statusMessageError(403,"You don't have the permission to do this action"));
     }
     newWarning = {
     
@@ -40,7 +40,8 @@ exports.getListOfWarnings = async(req, res, next) => {
     let user_id = req.user._id;
 
     if(req.user.type === "Professor"){
-        return next (new statusMessageError(403," this user is professor can't get warnings"));
+        return next (new statusMessageError(403,
+            "You don't have the permission to do this action"));
     }
 
     const warnings= await warningService.getListOfWarnings(req.query,
@@ -48,7 +49,8 @@ exports.getListOfWarnings = async(req, res, next) => {
 
 
     if(warnings.length === 0){
-        return next (new statusMessageError(404,"user doesn't have warning messages or offset out of range"));
+        return next (new statusMessageError(400,
+            "You don't have warning messages or you insert offset out of range"));
     }
 
     res.status(200).json(
@@ -72,7 +74,7 @@ exports.getWarning = async (req, res, next) => {
 
     const warning = await warningService.getWarning(req.params.id);
     if(warning === null){
-        return next (new statusMessageError(404,"invalid Warning Id"));
+        return next (new statusMessageError(400,"Invalid Id"));
     }
     res.status(200).json({
         id : warning._id,

@@ -89,7 +89,7 @@ exports.getCourse = async (req, res, next) => {
     }
     const course = await courseService.getCourse(req.params.id);
 
-    if(!course) return next(new statusMessageError(404, "Invalid course id"));
+    if(!course) return next(new statusMessageError(400, "Invalid course id"));
 
     res.status(200).json(course);
 }
@@ -105,7 +105,7 @@ exports.enrollOnCourse = async (req, res, next) => {
     if(!course) return next(new statusMessageError(400,"Invalid course id"));
 
     if(checkUserHasThisCourse(course._id, req.user))
-        return next(new statusMessageError(403,
+        return next(new statusMessageError(400,
              "Student is already enrolled in this course"));
 
     await courseService.enrollOnCourse(req.user, course);
@@ -130,7 +130,7 @@ exports.getCourseStudents = async (req,res, next) => {
     }
     const course = await courseService.getCourse(req.params.id);
 
-    if(!course) return next(new statusMessageError(404, "Invalid course id"));
+    if(!course) return next(new statusMessageError(400, "Invalid course id"));
 
     res.status(200).json({
         items: course.students.map(stud => {

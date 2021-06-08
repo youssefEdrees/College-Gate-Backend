@@ -1,6 +1,6 @@
 const {Course} = require("../models/course.model");
-
-
+const {Professor} = require("../models/professor.model");
+const {Student} = require("../models/student.model");
 
 exports.createCourse = async(newCourse , user) => {
 
@@ -11,15 +11,16 @@ exports.createCourse = async(newCourse , user) => {
     
     course = course.toJSON();
     await updateUserCourses(user, course);
+  
     return course;
 
 };
 exports.enrollOnCourse = async (user, course) => {
     
     course.students.push(user);
-    await Course.findOneAndUpdate({_id:course._id}, course);
+    const updatedCourse = await Course.findOneAndUpdate({_id:course._id}, course);
 
-    await updateUserCourses(user, course);
+    await updateUserCourses(user, updatedCourse);
 
    
 };
@@ -38,7 +39,10 @@ exports.getCourse = async (id) => {
 };
 updateUserCourses = async (user, course) => {
 
-    user.courses.push(course);
-    await user.save();
 
+    user.courses.push(course);
+    if(user.type === "Professor")
+        await Professor.findOneAndUpdate({_id: user._id}, user);
+    else
+        await Student.findOneAndUpdate({_id: user._id}, user);
 }
