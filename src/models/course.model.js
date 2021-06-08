@@ -10,8 +10,8 @@ const courseSchema = new mongoose.Schema({
     },
     imgUrl: {
       type: String, 
-      match: /\.(png|jpg|jpeg|svg)$/, 
-      default : "uploads/courses/default.jpg"
+      //match: /\.(png|jpg|jpeg|svg)$/, 
+      default : "https://picsum.photos/500"
     },
     professor: {
       type: mongoose.Schema.Types.ObjectId,
@@ -20,6 +20,10 @@ const courseSchema = new mongoose.Schema({
     },
     students: {
       type: [{type: mongoose.Schema.Types.ObjectId, ref:"Student"}]
+    },
+    key: {
+      type: String,
+      required: true
     }
         
 },

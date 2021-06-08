@@ -46,3 +46,17 @@ updateUserCourses = async (user, course) => {
     else
         await Student.findOneAndUpdate({_id: user._id}, user);
 }
+
+exports.createCourseKey = async () => {
+    let newKey =0;
+    console.log("INSIDE create");
+    while(true){
+        newKey = Math.floor(Math.random()*100000);
+        value = await Course.findOne({key : newKey});
+        if(!value){
+            break;
+        }
+    }
+    console.log(newKey);
+    return newKey;
+};

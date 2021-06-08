@@ -21,7 +21,7 @@ exports.getListOfAnnouncements = async(courseId , query) => {
     const result = Announcement.find({course: courseId})
     .sort( { date: -1 } )
     .select("course  professor content date")
-    .populate("professor", "name imageUrl")
+    .populate("professor", "name imgUrl")
     .populate("course", "name imgUrl")
     .skip(parseInt(query.offset))
     .limit(parseInt(query.limit));
@@ -45,7 +45,7 @@ exports.getAllAnnouncements = async(query, courses) => {
     const result = Announcement.find({course:  courses})
     .sort( { date: -1 } )
     .select("id  professor course  content date")
-    .populate("professor", "name imageUrl")
+    .populate("professor", "name imgUrl")
     .populate("course", "name imgUrl")
     .skip(parseInt(query.offset))
     .limit(parseInt(query.limit));

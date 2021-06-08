@@ -47,10 +47,10 @@ exports.createCourse = async(req, res, next) => {
     const check = checkCourseNameIsExist(req.body.name , req.user, next);
 
     if(check instanceof statusMessageError) return next (check);
-
+    let key = await courseService.createCourseKey();
     let imagePath;
     if(!req.file){ 
-        imagePath = "uploads/courses/default.jpg";
+        imagePath = "https://picsum.photos/500";
     } 
     else {
         imagePath = req.file.path;
@@ -62,6 +62,7 @@ exports.createCourse = async(req, res, next) => {
     
         "name": req.body.name,
         "imgUrl": imagePath,
+        "key": key,
         "professor": req.user._id,
 
     }
@@ -73,7 +74,7 @@ exports.createCourse = async(req, res, next) => {
         name: course.name,
         imgUrl: course.imgUrl,
         professor: course.professor,
-        
+        key: course.key
     });
     
     

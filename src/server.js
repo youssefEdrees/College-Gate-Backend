@@ -5,14 +5,14 @@ const config = require('config');
 let server;
 const port = config.get('PORT') || 3000;
 const ip = config.get('IP');
-mongoose.connect(config.get('db_shubra'), {
+mongoose.connect(config.get('db'), {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true
   }).then(() => {
     console.log('Connected to MongoDB');
-    server = app.listen(port, () => {
+    server = app.listen(port,() => {
     console.log(`Listening to port ${port}`);
     });
   }).catch(err => {

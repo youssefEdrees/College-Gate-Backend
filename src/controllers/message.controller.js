@@ -16,17 +16,32 @@ exports.createMessage = async(req, res, next) => {
     if(check instanceof statusMessageError ) return next(check);
     
     let newMessage;
-
-    newMessage = {
+    if(req.user.type === "Student"){
+        newMessage = {
         
-        "course": req.params.id,
-        "sender": req.user._id,
-        "receiver": req.body.receiver_id,
-        "subject": req.body.subject,
-        "content" : req.body.content,
-        "date" : getDate(new Date())
-
+            "course": req.params.id,
+            "sender": req.user._id,
+            "receiver": course.professor._id,
+            "subject": req.body.subject,
+            "content" : req.body.content,
+            "date" : getDate(new Date())
+    
+        }
     }
+    else
+    {
+        newMessage = {
+        
+            "course": req.params.id,
+            "sender": req.user._id,
+            "receiver": req.body.receiver_id,
+            "subject": req.body.subject,
+            "content" : req.body.content,
+            "date" : getDate(new Date())
+    
+        }
+    }
+    
     
     const message = await messageService.createMessage(newMessage);
    

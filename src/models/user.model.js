@@ -36,8 +36,8 @@ const userSchema = mongoose.Schema({
     },
     imgUrl : {
       type : String,
-      match: /\.(png|jpg|jpeg|svg)$/,
-      default: "uploads/users/default.jpg"
+      //match: /\.(png|jpg|jpeg|svg)$/,
+      default: "https://picsum.photos/500"
 
     } , 
     verifyToken: {
