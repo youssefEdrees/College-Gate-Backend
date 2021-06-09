@@ -28,7 +28,12 @@ exports.getCourse = async (id, enroll) => {
     let course;
     if(String(enroll) === 'enroll'){
         course =  Course.findOne({key: id})
-        .populate("professor", "name imgUrl")
+        .populate({
+            path: 'professor',
+            
+            populate: { path: 'department'}
+          })
+    
         .populate("students", "name imgUrl");
      
     }

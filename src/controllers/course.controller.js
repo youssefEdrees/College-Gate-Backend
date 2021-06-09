@@ -101,15 +101,22 @@ exports.enrollOnCourse = async (req, res, next) => {
     if(req.user.type !== "Student") 
         return next(new statusMessageError(403,
              "You do not have the permission to perform this action"));
+
     const course = await courseService.getCourse(req.params.id, 'enroll');
 
     if(!course) return next(new statusMessageError(400,"Invalid course id"));
+
+
+    if(String(course.professor.department._id) !== String(req.user.department._id))
+        return next(new statusMessageError(400,
+            "Wrong key"));
 
     if(checkUserHasThisCourse(course._id, req.user))
         return next(new statusMessageError(400,
              "Student is already enrolled in this course"));
 
     await courseService.enrollOnCourse(req.user, course);
+    
     res.status(200).json({
 
         id: course._id,
@@ -163,7 +170,8 @@ exports.getAllCourses = async(req, res, next) => {
                             id: course.professor._id,
                             name: course.professor.name,
                             imgUrl: course.professor.imgUrl
-                        } 
+                        },
+                        key: course.key
                     
                     }
         

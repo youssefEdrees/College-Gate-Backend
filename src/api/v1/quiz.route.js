@@ -1,24 +1,23 @@
 const express = require("express");
 const {quizConrtoller} = require("../../controllers");
 const catchAsync = require("../../utils/catchAsync");
-//const { route } = require("../api/v1");
+const {authenticate} = require("../../midllewares/auth");
 
 const router = express.Router();
 
 
 router
-    .route("/")
-    .post(catchAsync(quizConrtoller.createQuiz));
+    .route("/course/:id")
+    .post(catchAsync(authenticate), catchAsync(quizConrtoller.createQuiz));
     
 
 
 router
     .route("/:id")
-    .get(catchAsync(quizConrtoller.getQuiz));
+    .get(catchAsync(authenticate), catchAsync(quizConrtoller.getQuiz));
     
-router.route("/")
-    .get((req,res)=>{
-        res.end("adad");
-    }
-    );
+router
+    .route("/all/course/:id")
+    .get(catchAsync(authenticate), catchAsync(quizConrtoller.getQuizzes));
+
 module.exports= router;

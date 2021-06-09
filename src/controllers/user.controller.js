@@ -38,12 +38,13 @@ exports.createStudent = async (req,res,next)=> {
 
 exports.createDepartment = async (req,res,next)=> {
     const key = config.get('MASTER_KEY');
-    var receivedKey = req.body.key;
+    var receivedKey = req.body.key
+    console.log("master",key, "receivedKey", receivedKey);
     var data = req.body.department;
-    if (Number(key)!= Number(receivedKey)){
+    if (String(key) !== String(receivedKey)){
         return next(new statusMessageError(401," Wrong key "));
     }
-    if (data.password != data.passwordConfirm){
+    if (data.password !== data.passwordConfirm){
         return next(new statusMessageError(400," Password and password confirm don't match "));
     }
     const check = await userService.checkDepartmentName(data);

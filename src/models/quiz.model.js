@@ -14,6 +14,15 @@ const quizSchema = new mongoose.Schema({
         type : Number,
         required: true
     },
+    avg : {
+        type : Number,
+        required: true
+    },
+    max : {
+        type : Number,
+        required: true
+    },
+
     students : [{
         type : mongoose.Schema.Types.ObjectId ,
         ref : 'Student',
