@@ -46,9 +46,22 @@ exports.createDepartment = async (req,res,next)=> {
     if (data.password != data.passwordConfirm){
         return next(new statusMessageError(400," Password and password confirm don't match "));
     }
+    const check = await userService.checkDepartmentName(data);
+    if(check) return next(new statusMessageError(400," Department name already exists "));
+
     const newDepartment = await userService.createDepartment(data);
     
-    res.status(200).json(newDepartment);
+    res.status(200).json({
+        id: newDepartment._id,
+        departmentName: newDepartment.departmentName,
+        email: newDepartment.email,
+        name: newDepartment.name,
+        imgUrl: newDepartment.imgUrl,
+        professorKey: newDepartment.professorKey,
+        studentKey: newDepartment.studentKey,
+        type: newDepartment.type
+
+    });
 };
 
 
@@ -57,13 +70,15 @@ exports.createStudent = async (req,res,next)=> {
     
     var receivedKey = req.body.key;
     var data = req.body.user;
-    data.department = data.departmentId;
-    if (await userService.checkDepartmentKey(data.departmentId,receivedKey,"Student")){
-        return next(new statusMessageError(401," Wrong key or department id"));
+    //data.department = data.departmentId;
+    dep = await userService.checkDepartmentKey(receivedKey,"Student");
+    if (!dep){
+        return next(new statusMessageError(401," Wrong key"));
     }
     if (data.password != data.passwordConfirm){
         return next(new statusMessageError(400," Password and password confirm don't match "));
     }
+    data.department = dep._id;
     const newStudent = await userService.createStudent(data);
     
     res.status(200).json(newStudent);
@@ -72,13 +87,15 @@ exports.createStudent = async (req,res,next)=> {
 exports.createProfessor = async (req,res,next)=> {
     var receivedKey = req.body.key;
     var data = req.body.user;
-    data.department = data.departmentId;
-    if (await userService.checkDepartmentKey(data.departmentId,receivedKey,"Professor")){
-        return next(new statusMessageError(401," Wrong key  or department id"));
+    //data.department = data.departmentId;
+    dep = await userService.checkDepartmentKey(receivedKey,"Professor");
+    if (!dep){
+        return next(new statusMessageError(401," Wrong key"));
     }
     if (data.password != data.passwordConfirm){
         return next(new statusMessageError(400," Password and password confirm don't match "));
     }
+    data.department = dep._id;
     const newProfessor = await userService.createProfessor(data);
     
     res.status(200).json(newProfessor);
@@ -98,7 +115,7 @@ exports.getUser = async (req,res,next)=>{
 exports.departmentLogin = async (req,res,next)=>{
     requestedUser = await userService.getDepartmentLogin(req.body.email,req.body.password);
     if(requestedUser == null){
-        return next (new statusMessageError(401,"incorrect username or password"));
+        return next (new statusMessageError(401,"Incorrect username or password or different user type"));
     }
     const token = authService.createToken(requestedUser._id);
     res.status(200).json({
@@ -110,7 +127,7 @@ exports.departmentLogin = async (req,res,next)=>{
 exports.StudentLogin = async (req,res,next)=>{
     loggedUser = await userService.getStudentLogin(req.body.email,req.body.password);
     if(loggedUser == null){
-        return next (new statusMessageError(401,"incorrect username or password"));
+        return next (new statusMessageError(401,"incorrect username or password or different user type"));
     }
     const myToken = authService.createToken(loggedUser._id);
     res.status(200).json({
@@ -122,7 +139,7 @@ exports.StudentLogin = async (req,res,next)=>{
 exports.professorLogin = async (req,res,next)=>{
     loggedUser = await userService.getProfessorLogin(req.body.email,req.body.password);
     if(loggedUser == null){
-        return next (new statusMessageError(401,"incorrect username or password"));
+        return next (new statusMessageError(401,"incorrect username or password or different user type"));
     }
     const myToken = authService.createToken(loggedUser._id);
     res.status(200).json({

@@ -60,7 +60,7 @@ exports.getDepartmentList = async ()=>{
 
 
 exports.getUserById = async (userId)=>{
-    let user= await User.findById(userId);
+    let user= await User.find({userId}, {password:0, passwordConfirm: 0} );
     user= user.toJSON();
     return user;
 }
@@ -104,24 +104,27 @@ exports.getProfessorLogin = async (receivedEmail,receivedPassword)=>{
 }
 
 
-exports.checkDepartmentKey= async (departmentId,key,type)=> {
+exports.checkDepartmentKey= async (key,type)=> {
     if (type === 'Student'){
         console.log('Student');
         console.log('Student',key);
-        dep = await Department.findOne({_id:departmentId,studentKey:key});
+        dep = await Department.findOne({studentKey:key});
         console.log(dep, typeof(dep));
-        if(!dep){
+        /*if(!dep){
             return true;
         }
-        return false;
+        return false;*/
+         
     }else {
         console.log('prof');
-        dep = await Department.findOne({_id:departmentId,professorKey:key});
-        if(!dep){
+        dep = await Department.findOne({professorKey:key});
+        console.log(dep, typeof(dep));
+        /*if(!dep){
             return true;
         }
-        return false;
+        return false;*/
     }
+    return dep;
 }
 exports.setImage = async (user, imagePath) => {
 
@@ -143,4 +146,10 @@ exports.deleteImage = async (imagePath) => {
             if (error.code !== 'ENOENT') throw error;
         }
     }
+}
+exports.checkDepartmentName = async(department)=>{
+
+    const result = await Department.findOne(
+        {departmentName:department.departmentName});
+    return result;
 }

@@ -24,15 +24,15 @@ exports.createComplaint = async(req, res, next) => {
 
     }
 
-    const comaplint = await complaintService.createComplaint(newComplaint);
+    const complaint = await complaintService.createComplaint(newComplaint);
     
     res.status(200).json({
-        id : comaplint._id,
-        sender: comaplint.sender,
-        receiver: comaplint.receiver,
-        subject: comaplint.subject,
-        content: comaplint.content,
-        date: comaplint.date,
+        id : complaint._id,
+        sender: complaint.sender,
+        receiver: complaint.receiver,
+        subject: complaint.subject,
+        content: complaint.content,
+        date: complaint.date,
         response: complaint.response
     });
     

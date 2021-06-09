@@ -23,11 +23,11 @@ exports.getListOfComplaints= async(query, type, user) => {
         .select("sender receiver subject content date")
     }
     else if (type === "received" && user.type !== "Department"){
-        result = Complaint.find({sender: user._id})
+        result = Complaint.find({sender: user._id, response: true})
         .select("sender receiver subject content_response date_response")
     }
     else {
-        result = Complaint.find({sender: user._id})
+        result = Complaint.find({receiver: user._id})
     }
     result.sort( { date: -1 } )
     //.select("sender receiver subject content date")
