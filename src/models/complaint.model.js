@@ -25,15 +25,26 @@ const complaintSchema = new mongoose.Schema(
         content: {
             required: [true , 'complaint should have a content'],
             type: String,
-            required: true
+            
+        },
+        content_response: {
+            //required: [true , 'complaint should have a content'],
+            type: String,
+            default : " "
         },
         date: {
             type: String,
             required: true
         },
-        /*response: {
-            type: bool,
-        }*/
+        date_response: {
+            type: String,
+            //required: true
+            default : " "
+        },
+        response: {
+            type: Boolean,
+            default:false
+        }
         
         
     },

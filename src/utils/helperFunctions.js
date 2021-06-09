@@ -3,7 +3,7 @@ const statusMessageError = require("../utils/statusMessageError");
 const monthNames = ["January", "February", "March", "April", "May", "June",
 "July", "August", "September", "October", "November", "December"
 ];
-const dayNames = ["Sunday", "Monday", "Tuesday", "wednesday", "Thursday"
+const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"
     , "Friday", "Saturday"];
 
 exports.getDate = (d) => {

@@ -14,13 +14,14 @@ router
     .post(catchAsync(authenticate), catchAsync(complaintController.createComplaint));
 
 router
-    .route("/me/response")
-    .post(catchAsync(authenticate),catchAsync(complaintController.createComplaint));
+    .route("/:id/me/response")
+    .put(catchAsync(authenticate),catchAsync(complaintController.updateComplaint));
+
+
 router
-    .route("/:type")
+    .route("/type/:type")
     .get(catchAsync(authenticate),catchAsync(complaintController.getListOfComplaints));
 router
     .route("/:id")
     .get(catchAsync(complaintController.getComplaint));
-
 module.exports= router;

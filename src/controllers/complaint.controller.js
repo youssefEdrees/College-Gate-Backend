@@ -1,60 +1,26 @@
 const {complaintService} = require("../services/");
 const {courseService} = require("../services/");
 const statusMessageError = require("../utils/statusMessageError");
-
+const {getDate} = require("../utils/helperFunctions");
 //ques????
 // check if user is stud so it is enroll in this course and if user is prof
 // so this course created by this prof ?
 
 //check course is exist or not 
 
-const monthNames = ["January", "February", "March", "April", "May", "June",
-"July", "August", "September", "October", "November", "December"
-];
 
 exports.createComplaint = async(req, res, next) => {
-   
-    //let url = req.url;
+ 
     let newComplaint;
+   
+    newComplaint = {
     
-    //if(req.user.type === "Professor"){
-        //return next (new statusMessageError(403," You don't have the permission to do this action"));
-    //}
-    if((req.url).search("response") !== -1 ){ // emplyee response to stud
-
-       
-        complaintId = req.body.complaint_id;
-        //console.log(complaintId, typeof(complaintId));
-        //to know who the stud and the subject
-        const complaintResponse = await complaintService.getComplaint(complaintId);
-        // check if complaint not valid
-        if(complaintResponse === null){
-            return next (new statusMessageError(400,"Invalid Id"));
-        }
-        newComplaint = {
-        
-            "sender": req.user._id,
-            //"receiver": course.prof,
-            "receiver": complaintResponse.sender,
-            "subject": complaintResponse.subject,
-            "content" : req.body.content,
-            "date" : getDate(new Date())
-    
-        }
-
-    }
-    else {
-
-        newComplaint = {
-        
-            "sender": req.user._id,
-            //"receiver": course.prof,
-            "receiver": req.user.department._id,
-            "subject": req.body.subject,
-            "content" : req.body.content,
-            "date" : getDate(new Date())
-    
-        }
+        "sender": req.user._id,
+        //"receiver": course.prof,
+        "receiver": req.user.department._id,
+        "subject": req.body.subject,
+        "content" : req.body.content,
+        "date" : getDate(new Date())
 
     }
 
@@ -66,23 +32,50 @@ exports.createComplaint = async(req, res, next) => {
         receiver: comaplint.receiver,
         subject: comaplint.subject,
         content: comaplint.content,
-        date: comaplint.date
+        date: comaplint.date,
+        response: complaint.response
     });
     
     
 };
+exports.updateComplaint = async (req, res, next) => {
+
+    const complaintId = req.params.id;
+    //console.log(complaintId, typeof(complaintId));
+    //to know who the stud and the subject
+    const complaintResponse = await complaintService.getComplaint(complaintId);
+    // check if complaint not valid
+    if(complaintResponse === null){
+        return next (new statusMessageError(400,"Invalid Id"));
+    }
+    console.log(complaintResponse.response);
+    if(complaintResponse.response === true)
+        return next (new statusMessageError(400,"You already responses"));
+    complaintResponse.response = true;
+    complaintResponse.content_response = req.body.content;
+    complaintResponse.date_response = getDate(new Date());
+
+    
+    const updatedComplaint = await complaintService.updateComplaint(complaintResponse);
+    
+    if(!updatedComplaint) 
+        return next (new statusMessageError(400,
+            "Can't updated Complaint"));
+
+    res.status(200).json(updatedComplaint);
+};
 exports.getListOfComplaints = async(req, res, next) => {
 
-    let type = req.params.type;
+    const type = req.params.type;
    
-    let user_id = req.user._id;
+    const user = req.user;
 
     //if(req.user.type === "Professor"){
         //return next (new statusMessageError(403," You don't have the permission to do this action"));
     //}
 
-    const complaints= await complaintService.getListOfComplaints(req.query,
-        type, user_id);
+    const complaints = await complaintService.getListOfComplaints(req.query,
+        type, user);
 
     if(complaints.length === 0){
         return next (new statusMessageError(400,"user doesn't have complaint messages or offset out of range"));
@@ -111,32 +104,6 @@ exports.getComplaint = async (req, res, next) => {
     if(complaint === null){
         return next (new statusMessageError(400,"Invalid Id"));
     }
-    res.status(200).json({
-        id : complaint._id,
-        sender: complaint.sender,
-        receiver: complaint.receiver,
-        subject: complaint.subject,
-        content: complaint.content,
-        date: complaint.date
-    });
+    res.status(200).json(complaint);
 
 }; 
-function getDate(d){
-
-    //let d = new Date();
-    let year = d.getFullYear();
-    let m = d.getMonth();
-    let day = d.getDay() - 1;
-    
-    let hours = d.getHours();
-    let minutes = d.getMinutes();
-    let ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    let strTime = hours + ':' + minutes + ' ' + ampm;
-
-    //return new Date( day+"-" + monthNames[m] + "-" + year +" " + strTime) ;
-    return day+"-" + monthNames[m] + "-" + year +" " + strTime;
-
-}

@@ -5,7 +5,7 @@ const config = require('config');
 let server;
 const port = config.get('PORT') || 3000;
 const ip = config.get('IP');
-mongoose.connect(config.get('db'), {
+mongoose.connect(config.get('db_shubra'), {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,

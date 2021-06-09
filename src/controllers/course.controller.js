@@ -186,7 +186,7 @@ function checkCourseNameIsExist(courseName, user){
         }      
     });
     if(courseIndex !== -1){
-        return new statusMessageError(403, "Course name is already exist");
+        return new statusMessageError(403, "Course name already exists");
     }
    
 };

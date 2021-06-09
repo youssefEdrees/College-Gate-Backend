@@ -3,7 +3,7 @@
     
     "db": "mongodb://myUser:psyymani@cluster0-shard-00-00.8dmmj.mongodb.net:27017,cluster0-shard-00-01.8dmmj.mongodb.net:27017,cluster0-shard-00-02.8dmmj.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-14acjm-shard-0&authSource=admin&retryWrites=true&w=majority",
     "db_shubra":"mongodb://localhost/college",
-    "PORT": "4000",
+    "PORT": "3000",
     "IP": "192.168.1.198",
     "MASTER_KEY":"123123",
 
