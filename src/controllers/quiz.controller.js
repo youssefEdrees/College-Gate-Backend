@@ -118,11 +118,15 @@ exports.getQuizzes = async (req, res, next) => {
                     id: quiz._id,
                     name: quiz.name,
                     full_mark: quiz.full_mark,
+                    avg: quiz.avg,
+                    max: quiz.max,
                     student:{
                         id: req.user._id,
                         name: req.user.name,
                         imgUrl: req.user.imgUrl,
-                        grade: grades[index]
+                        grade: grades[index],
+                        
+                        
                     }
                 }
             })

@@ -23,7 +23,7 @@ exports.getQuizzes = async (courseId, type) =>{
     let result;
     if(type === "Student"){
         result = Quiz.find({course: courseId})
-        .select("_id full_mark name students grades")
+        .select("_id full_mark name students grades avg max")
         .populate("students", "name imgUrl");
     }
     else{
